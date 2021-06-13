@@ -123,37 +123,50 @@ searchBox.addEventListener("keyup", async (event) =>{ // 3) escucho el searchbox
 
         // Lista de sugerencias
         for (let index = 0; index < 4; index++) {               // Escribimos/Mostramos las sugerencias como elementos <li> en el html
-            const element = `<li class="suggestion-element"><img src="./svg/icon-search-modo-noct.svg" alt="">${sugerenciasResultado.data[index].name}</li>`;
+            const resultName = sugerenciasResultado.data[index].name
+            const element = `
+            <li 
+            class="suggestion-element"
+            onclick="populateGifoGallery('${resultName}')"
+            >
+                <img src="./svg/icon-search-modo-noct.svg" alt="">
+                ${resultName}
+            </li>`;
             listSugerencias.innerHTML += element
         }
 
-        // Busqueda: preparamos la sección
-        searchOffset=0
-        gifsResultsIcon.src = "" // la busqueda no lleva icono de sección
+        await populateGifoGallery(searchWord)
 
-        gifsNoResultsDisplay({
-            title: searchWord,
-            message: "Intenta con otra búsqueda.",
-            noDataImg: "./svg/icon-busqueda-sin-resultado.svg",
-            sectionIcon: ""
-        })
-
-        console.log("search params", searchWord, searchOffset, searchLimit);
-        const gifs =  await buscarGifs(searchWord, searchOffset, searchLimit)
-
-        
-        if (gifs.data.length) {
-            gifsResultsDisplay()
-            searchOffset += searchLimit
-            dibujarGifs (gifs)
-            document.getElementById("resultsPanel").style.display = "block"    // 7) aparece la seccion3-results mostrando los gifs
-        }
         
     }
     else {
         listSugerencias.innerHTML = ""
     }
 })
+
+async function populateGifoGallery (searchWord, ) {
+    // Busqueda: preparamos la sección
+    searchOffset=0
+    gifsResultsIcon.src = "" // la busqueda no lleva icono de sección
+
+    gifsNoResultsDisplay({
+        title: searchWord,
+        message: "Intenta con otra búsqueda.",
+        noDataImg: "./svg/icon-busqueda-sin-resultado.svg",
+        sectionIcon: ""
+    })
+
+    console.log("search params", searchWord, searchOffset, searchLimit);
+    const gifs =  await buscarGifs(searchWord, searchOffset, searchLimit)
+
+    
+    if (gifs.data.length) {
+        gifsResultsDisplay()
+        searchOffset += searchLimit
+        dibujarGifs (gifs)
+        document.getElementById("resultsPanel").style.display = "block"    // 7) aparece la seccion3-results mostrando los gifs
+    }
+}
 
 // Buscar gifos
 btnVerMas.addEventListener('click', async (event) => { 
