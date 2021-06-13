@@ -128,6 +128,7 @@ searchBox.addEventListener("keyup", async (event) =>{ // 3) escucho el searchbox
             <li 
             class="suggestion-element"
             onclick="populateGifoGallery('${resultName}')"
+            style="cursor: pointer"
             >
                 <img src="./svg/icon-search-modo-noct.svg" alt="">
                 ${resultName}
